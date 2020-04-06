@@ -19,7 +19,11 @@ public class SchedulerTask {
     @Scheduled(cron = "0/10 * * * * *")
     @Async("taskExecutor")
     public void scheduled() {
-        logger.info("****************定时任务启动****************");
-        dataService.saveIP();
+        boolean result = dataService.saveIP();
+        if (result) {
+            logger.info("********定时任务启动********更新成功********");
+        } else {
+            logger.info("********定时任务启动********更新失败********");
+        }
     }
 }
