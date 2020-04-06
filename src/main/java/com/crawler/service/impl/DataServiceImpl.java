@@ -1,8 +1,8 @@
 package com.crawler.service.impl;
 
-import com.crawler.mapper.DataMapper;
 import com.crawler.service.DataService;
 import com.crawler.utils.IPUtils;
+import com.crawler.utils.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +17,19 @@ public class DataServiceImpl implements DataService {
     private String computerId;
 
     @Autowired
-    private DataMapper dataMapper;
+    private RedisUtils redisUtils;
 
     @Override
     public boolean saveIP() {
         String host = IPUtils.getHost();//计算机名
         String realIP = IPUtils.getRealIP();//新IP
-        try {
-            int result = dataMapper.saveIP(computerId, realIP, host);
-            if (result > 0) {
-                return true;
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            return false;
+        boolean hasKey = redisUtils.hHasKey("server_ip", computerId);
+        if (hasKey) {
+            redisUtils.hDel("server_ip", computerId);
+            return redisUtils.hSet("server_ip", computerId, realIP);
+        } else {
+            System.out.println("不存在");
+            return redisUtils.hSet("server_ip", computerId, realIP);
         }
-        return false;
     }
 }
