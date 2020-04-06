@@ -4,6 +4,8 @@ import com.crawler.analysis.AnalysisList;
 import com.crawler.analysis.AnalysisParam;
 import com.crawler.constant.AllConstant;
 import com.crawler.utils.ReturnResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +16,7 @@ import java.util.Map;
 
 @RestController
 public class BingCrawlerController {
+    private static Logger logger = LoggerFactory.getLogger(BingCrawlerController.class);
 
     @RequestMapping(value = {"/search.do", "/searchNew.do", "/searchSearch.do"})
     @ResponseBody
@@ -27,10 +30,10 @@ public class BingCrawlerController {
         String param = paramResult.getData().toString();
         //拼接请求链接
         String bingUrl = AllConstant.UrlConstant.BING_URL + "?q=" + param;
-        System.out.println("请求链接》》》" + bingUrl);
+        logger.info("请求链接》》》" + bingUrl);
         List<Map<String, String>> searchResultList = AnalysisList.startAnalysisList(bingUrl);
-        System.out.println("数据条数》》》" + searchResultList.size());
-        System.out.println("==================================================");
+        logger.info("数据条数》》》" + searchResultList.size());
+        logger.info("==================================================");
         returnResult.setCode("0");
         returnResult.setMsg("success");
         returnResult.setData(searchResultList);
