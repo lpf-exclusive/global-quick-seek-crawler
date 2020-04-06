@@ -2,7 +2,6 @@ package com.crawler.service.impl;
 
 import com.crawler.mapper.DataMapper;
 import com.crawler.service.DataService;
-import com.crawler.utils.CommonMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +13,7 @@ public class DataServiceImpl implements DataService {
 
     @Override
     public boolean saveIP(String host, String newIP) {
-        String currentTime = CommonMethod.currentTime();
-        int result = dataMapper.saveIP(newIP, currentTime, host);
+        int result = dataMapper.saveIP(newIP, host);
         if (result > 0) {
             return true;
         }
