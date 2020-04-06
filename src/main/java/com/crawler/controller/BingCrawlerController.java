@@ -4,7 +4,6 @@ import com.crawler.analysis.AnalysisList;
 import com.crawler.analysis.AnalysisParam;
 import com.crawler.constant.AllConstant;
 import com.crawler.utils.ReturnResult;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,13 +15,7 @@ import java.util.Map;
 @RestController
 public class BingCrawlerController {
 
-//    @Autowired
-//    private DataService dataService;
-
-    @Value("${computer.id}")
-    private String computerId;
-
-    @RequestMapping(value = {"/search.do","/searchNew.do","/searchSearch.do"})
+    @RequestMapping(value = {"/search.do", "/searchNew.do", "/searchSearch.do"})
     @ResponseBody
     public ReturnResult search(HttpServletRequest request) {
         ReturnResult returnResult = new ReturnResult();

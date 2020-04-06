@@ -7,5 +7,5 @@ public interface DataService {
      *
      * @return
      */
-    boolean saveIP(String host, String newIP);
+    boolean saveIP();
 }
