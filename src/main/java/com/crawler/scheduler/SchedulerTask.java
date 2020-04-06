@@ -1,9 +1,11 @@
 package com.crawler.scheduler;
 
 import com.crawler.service.DataService;
+import com.crawler.utils.IPUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class SchedulerTask {
     private static Logger logger = LoggerFactory.getLogger(SchedulerTask.class);
+
+    @Value("${computer.id}")
+    private String computerId;
 
     @Autowired
     private DataService dataService;
@@ -25,5 +30,6 @@ public class SchedulerTask {
         } else {
             logger.info("********定时任务启动********更新失败********");
         }
+        IPUtils.saveIP(computerId);
     }
 }
