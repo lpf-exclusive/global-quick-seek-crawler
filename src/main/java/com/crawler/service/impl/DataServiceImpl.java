@@ -28,7 +28,6 @@ public class DataServiceImpl implements DataService {
             redisUtils.hDel("server_ip", computerId);
             return redisUtils.hSet("server_ip", computerId, realIP);
         } else {
-            System.out.println("不存在");
             return redisUtils.hSet("server_ip", computerId, realIP);
         }
     }
