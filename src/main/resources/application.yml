@@ -5,5 +5,5 @@ server:
 computer:
   id: 0
 transit:
-  ip: 1.163.30.46
+  ip: 120.24.5.25
   port: 8888
