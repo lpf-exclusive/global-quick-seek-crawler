@@ -27,7 +27,7 @@ public class DataServiceImpl implements DataService {
         }
         String url = "http://" + IP + ":" + PORT + "/saveIP.do?IDConfig=" + computerID + "&IP=" + realIP + "";
         String result = HttpUtils.doGet(url);
-        if (result.contains("成功")) {
+        if (result.contains("file written successfully")) {
             return true;
         }
         return false;
