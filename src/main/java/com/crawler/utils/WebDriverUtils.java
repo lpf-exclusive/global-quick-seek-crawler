@@ -31,7 +31,9 @@ public class WebDriverUtils {
         chromeOptions.addArguments("--disable-javascript");
         chromeOptions.addArguments("--incognito");
         chromeOptions.addArguments("--start-maximized");
-        chromeOptions.addArguments("--disable-gpu");//--disable-gpu : 谷歌文档提到需要加上这个属性来规避bug
+        chromeOptions.addArguments("--disable-gpu");
+        chromeOptions.addArguments("--headless");
+        chromeOptions.addArguments("blink-settings=imagesEnabled=false");
         WebDriver driver = new ChromeDriver(chromeOptions);
         driver.get(website);
         return driver;

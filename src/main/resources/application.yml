@@ -6,4 +6,4 @@ computer:
   id: 0
 transit:
   ip: 120.24.5.25
-  port: 8888
+  port: 8080
