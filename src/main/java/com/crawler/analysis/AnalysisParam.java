@@ -52,7 +52,7 @@ public class AnalysisParam {
         /**
          * 处理页码参数page
          */
-        int page = new Random().nextInt(50) + 1;
+        int page = new Random().nextInt(20) + 1;
         param = param + "&first=" + ((page - 1) * 10);
 //        String page = request.getParameter("page");
 //        if (StringUtils.isBlank(page)) {
