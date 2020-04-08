@@ -25,7 +25,7 @@ public class DataServiceImpl implements DataService {
         if (StringUtils.isBlank(realIP) || "null".equals(realIP)) {
             return false;
         }
-        String url = "http://" + IP + ":" + PORT + "/saveIP.do?IDConfig=" + computerID + "&IP=" + realIP + "";
+        String url = "http://" + IP + ":" + PORT + "/TestPro/saveIP.do?IDConfig=" + computerID + "&IP=" + realIP + "";
         String result = HttpUtils.doGet(url);
         if (result.contains("file written successfully")) {
             return true;
