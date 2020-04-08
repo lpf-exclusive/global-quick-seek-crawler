@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Random;
 
 public class AnalysisParam {
 
@@ -51,24 +52,26 @@ public class AnalysisParam {
         /**
          * 处理页码参数page
          */
-        String page = request.getParameter("page");
-        if (StringUtils.isBlank(page)) {
-            returnResult.setCode("1");
-            returnResult.setMsg("no page");
-            return returnResult;
-        } else {
-            /**
-             * 处理第几页类型参数pageNum
-             */
-            int pageNum = Integer.parseInt(page);
-            if (pageNum == 1) {
-                param = param + "&first=1";
-            } else if (pageNum == 2) {
-                param = param + "&first=11";
-            } else if (pageNum > 2) {
-                param = param + "&first=" + ((Integer.parseInt(page) - 1) * 14 - 3);
-            }
-        }
+        int page = new Random().nextInt(50) + 1;
+        param = param + "&first=" + ((page - 1) * 10);
+//        String page = request.getParameter("page");
+//        if (StringUtils.isBlank(page)) {
+//            returnResult.setCode("1");
+//            returnResult.setMsg("no page");
+//            return returnResult;
+//        } else {
+//            /**
+//             * 处理第几页类型参数pageNum
+//             */
+//            int pageNum = Integer.parseInt(page);
+//            if (pageNum == 1) {
+//                param = param + "&first=1";
+//            } else if (pageNum == 2) {
+//                param = param + "&first=11";
+//            } else if (pageNum > 2) {
+//                param = param + "&first=" + ((Integer.parseInt(page) - 1) * 14 - 3);
+//            }
+//        }
         returnResult.setCode("0");
         returnResult.setMsg("success");
         returnResult.setData(param);
