@@ -26,7 +26,11 @@ public class WebDriverUtils {
         // 设置chromedriver路径
         System.setProperty("webdriver.chrome.driver", driverPath);
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--start-maximized");//启动最大化
+        chromeOptions.addArguments("--disable-images");
+        chromeOptions.addArguments("--disable-plugins");
+        chromeOptions.addArguments("--disable-javascript");
+        chromeOptions.addArguments("--incognito");
+        chromeOptions.addArguments("--start-maximized");
         chromeOptions.addArguments("--disable-gpu");//--disable-gpu : 谷歌文档提到需要加上这个属性来规避bug
         WebDriver driver = new ChromeDriver(chromeOptions);
         driver.get(website);
