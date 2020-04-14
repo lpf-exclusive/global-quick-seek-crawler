@@ -1,11 +1,8 @@
 package com.crawler.utils;
 
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-
-import java.util.Set;
 
 public class WebDriverUtils {
     /**
@@ -40,17 +37,21 @@ public class WebDriverUtils {
         WebDriver driver = new ChromeDriver(chromeOptions);
         driver.get(website);
         //获取cookies
-        Set<Cookie> cookieSet = driver.manage().getCookies();
-        for (Cookie cookie : cookieSet) {
-            String cookieName = cookie.getName();
-            String cookieValue = cookie.getValue();
-            if ("SRCHHPGUSR".equals(cookieName)) {
-                String string = cookieValue.substring(0, cookieValue.length() - 1) + "&NRSLT=50;";
-                //设置cookies
-                Cookie c1 = new Cookie(cookieName, string);
-                driver.manage().addCookie(c1);
-            }
-        }
+//        Set<Cookie> cookieSet = driver.manage().getCookies();
+//        driver.manage().deleteAllCookies();
+//        for (Cookie cookie : cookieSet) {
+//            String cookieName = cookie.getName();
+//            String cookieValue = cookie.getValue();
+//            System.out.println(cookieName + "<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>" + cookieValue);
+//            if ("SRCHHPGUSR".equals(cookieName)) {
+//                String string = cookieValue + "&NRSLT=50;";
+//                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>" + string);
+//                //设置cookies
+//                Cookie c1 = new Cookie(cookieName, string);
+//                driver.manage().addCookie(c1);
+//                break;
+//            }
+//        }
         return driver;
     }
 }
