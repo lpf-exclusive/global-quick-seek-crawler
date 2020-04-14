@@ -27,6 +27,5 @@ public class SchedulerTask {
         } else {
             logger.info("********定时任务启动********更新失败********");
         }
-//        IPUtils.saveIP(computerId);
     }
 }
