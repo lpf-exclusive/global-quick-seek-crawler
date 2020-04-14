@@ -10,7 +10,6 @@ import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class AnalysisParam {
 
@@ -26,7 +25,7 @@ public class AnalysisParam {
         while (enumeration.hasMoreElements()) {
             String sessionName = enumeration.nextElement().toString();//获取session中的键值
             String sessionValue = httpSession.getAttribute(sessionName).toString();//根据键值取出session中的值
-            map.put(sessionName + sessionValue, "");
+            map.put(sessionName, sessionValue);
         }
 
         /**
@@ -69,16 +68,17 @@ public class AnalysisParam {
          * 处理页码参数page
          */
         int page;
-        while (true) {
-            page = new Random().nextInt(15) + 1;
-            if (!map.containsKey(keyword + page)) {
-                System.out.println("没有采集过该页，开始采集。。。");
-                break;
-            }
-            System.out.println("已经采集过该页，重新选择页码。。。");
+        String pageStr = map.get(keyword);
+        if (StringUtils.isBlank(pageStr)) {
+            System.out.println("该关键词是首次采集。。。");
+            page = 1;
+        } else {
+            System.out.println("该页已经采集，加一页。。。");
+            page = Integer.parseInt(pageStr) + 1;
+            System.out.println("当前采集页码为>>>>>>   " + page);
         }
         param = param + "&first=" + ((page - 1) * 10);
-        httpSession.setAttribute(keyword + page, "");
+        httpSession.setAttribute(keyword, page);
         returnResult.setCode("0");
         returnResult.setMsg("success");
         returnResult.setData(param);
