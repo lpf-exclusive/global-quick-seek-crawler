@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.util.Set;
+
 public class WebDriverUtils {
     /**
      * <p>
@@ -37,9 +39,18 @@ public class WebDriverUtils {
         chromeOptions.addArguments("blink-settings=imagesEnabled=false");
         WebDriver driver = new ChromeDriver(chromeOptions);
         driver.get(website);
-        //设置cookies
-        Cookie c1 = new Cookie("SRCHHPGUSR", "CW=1920&CH=376&DPR=1&UTC=480&WTS=63722443621&HV=1586848021&NEWWND=1&NRSLT=50&SRCHLANG=&AS=1&NNT=1&HAP=0");
-        driver.manage().addCookie(c1);
+        //获取cookies
+        Set<Cookie> cookieSet = driver.manage().getCookies();
+        for (Cookie cookie : cookieSet) {
+            String cookieName = cookie.getName();
+            String cookieValue = cookie.getValue();
+            if ("SRCHHPGUSR".equals(cookieName)) {
+                String string = cookieValue.substring(0, cookieValue.length() - 1) + "&NRSLT=50;";
+                //设置cookies
+                Cookie c1 = new Cookie(cookieName, string);
+                driver.manage().addCookie(c1);
+            }
+        }
         return driver;
     }
 }
