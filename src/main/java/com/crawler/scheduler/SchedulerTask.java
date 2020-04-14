@@ -1,7 +1,6 @@
 package com.crawler.scheduler;
 
 import com.crawler.service.DataService;
-import com.crawler.utils.IPUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,6 @@ public class SchedulerTask {
         } else {
             logger.info("********定时任务启动********更新失败********");
         }
-        IPUtils.saveIP(computerId);
+//        IPUtils.saveIP(computerId);
     }
 }
