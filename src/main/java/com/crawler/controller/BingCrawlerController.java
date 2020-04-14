@@ -22,7 +22,6 @@ public class BingCrawlerController {
     @ResponseBody
     public ReturnResult search(HttpServletRequest request) {
         ReturnResult returnResult = new ReturnResult();
-
         ReturnResult paramResult = AnalysisParam.startAnalysisParam(request);
         if (!"success".equals(paramResult.getMsg())) {
             return paramResult;
