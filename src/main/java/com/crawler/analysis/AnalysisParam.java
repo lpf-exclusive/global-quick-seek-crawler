@@ -1,32 +1,20 @@
 package com.crawler.analysis;
 
+import com.crawler.utils.RedisUtils;
 import com.crawler.utils.ReturnResult;
 import org.apache.commons.lang3.StringUtils;
+import redis.clients.jedis.ShardedJedis;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AnalysisParam {
 
     public static ReturnResult startAnalysisParam(HttpServletRequest request) {
+        ShardedJedis shardedJedis = RedisUtils.initShardedJedis();
         String param;
         ReturnResult returnResult = new ReturnResult();
-        /**
-         * 获取session
-         */
-        HttpSession httpSession = request.getSession();
-        Enumeration enumeration = httpSession.getAttributeNames();//获取session中所有的键值对
-        Map<String, String> map = new HashMap<>();
-        while (enumeration.hasMoreElements()) {
-            String sessionName = enumeration.nextElement().toString();//获取session中的键值
-            String sessionValue = httpSession.getAttribute(sessionName).toString();//根据键值取出session中的值
-            map.put(sessionName, sessionValue);
-        }
 
         /**
          * 处理关键词参数keyword
@@ -67,18 +55,21 @@ public class AnalysisParam {
         /**
          * 处理页码参数page
          */
+        String value = shardedJedis.get("crawler:" + keyword);
+
         int page;
-        String pageStr = map.get(keyword);
-        if (StringUtils.isBlank(pageStr)) {
+        if (StringUtils.isBlank(value)) {
             System.out.println("该关键词是首次采集。。。");
             page = 1;
         } else {
             System.out.println("该页已经采集，加一页。。。");
-            page = Integer.parseInt(pageStr) + 1;
+            page = Integer.parseInt(value) + 1;
             System.out.println("当前采集页码为>>>>>>   " + page);
         }
         param = param + "&first=" + ((page - 1) * 10);
-        httpSession.setAttribute(keyword, page);
+        shardedJedis.set("crawler:" + keyword, page + "");
+        shardedJedis.expire("crawler:" + keyword, 20 * 60);
+        RedisUtils.closeShardedJedis(shardedJedis);
         returnResult.setCode("0");
         returnResult.setMsg("success");
         returnResult.setData(param);
