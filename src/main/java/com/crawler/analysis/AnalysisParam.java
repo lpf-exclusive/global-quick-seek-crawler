@@ -1,9 +1,9 @@
 package com.crawler.analysis;
 
-import com.crawler.utils.RedisUtils;
+import com.crawler.utils.HttpUtils;
+import com.crawler.utils.IPUtils;
 import com.crawler.utils.ReturnResult;
 import org.apache.commons.lang3.StringUtils;
-import redis.clients.jedis.ShardedJedis;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -12,7 +12,6 @@ import java.net.URLDecoder;
 public class AnalysisParam {
 
     public static ReturnResult startAnalysisParam(HttpServletRequest request) {
-        ShardedJedis shardedJedis = RedisUtils.initShardedJedis();
         String param;
         ReturnResult returnResult = new ReturnResult();
 
@@ -55,8 +54,11 @@ public class AnalysisParam {
         /**
          * 处理页码参数page
          */
-        String value = shardedJedis.get("crawler:" + keyword);
-
+        String ip = IPUtils.getIpAddress(request);
+        //获取页码
+        String getUrl = "http://120.24.5.25:8080/TestPro/getPage.do?IP=" + ip + "&keyword=" + keyword;
+        String value = HttpUtils.doGet(getUrl);
+        System.out.println("获取到的页码是>>>>>>   " + value);
         int page;
         if (StringUtils.isBlank(value)) {
             System.out.println("该关键词是首次采集。。。");
@@ -67,9 +69,10 @@ public class AnalysisParam {
             System.out.println("当前采集页码为>>>>>>   " + page);
         }
         param = param + "&first=" + ((page - 1) * 10);
-        shardedJedis.set("crawler:" + keyword, page + "");
-        shardedJedis.expire("crawler:" + keyword, 20 * 60);
-        RedisUtils.closeShardedJedis(shardedJedis);
+        //保存页码
+        String saveUrl = "http://120.24.5.25:8080/TestPro/savePage.do?IP=" + ip + "&keyword=" + keyword + "&page=" + page;
+        String result = HttpUtils.doGet(saveUrl);
+        System.out.println("保存页码结果>>>>>>   " + result);
         returnResult.setCode("0");
         returnResult.setMsg("success");
         returnResult.setData(param);
