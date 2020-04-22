@@ -17,12 +17,11 @@ public class HttpUtils {
      * @throws Exception
      */
     public static String doGet(String urlStr) {
-        URL url = null;
         HttpURLConnection conn = null;
         InputStream is = null;
         ByteArrayOutputStream baos = null;
         try {
-            url = new URL(urlStr);
+            URL url = new URL(urlStr);
             conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(TIMEOUT_IN_MILLIONS);
             conn.setConnectTimeout(TIMEOUT_IN_MILLIONS);
