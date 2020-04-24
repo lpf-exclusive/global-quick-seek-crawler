@@ -1,5 +1,6 @@
 package com.crawler.analysis;
 
+import com.crawler.constant.AllConstant;
 import com.crawler.utils.HttpUtils;
 import com.crawler.utils.IPUtils;
 import com.crawler.utils.ReturnResult;
@@ -8,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Random;
 
 public class AnalysisParam {
 
@@ -31,7 +33,31 @@ public class AnalysisParam {
                 returnResult.setMsg("keyword format error");
                 return returnResult;
             }
-            param = keyword;
+            //剔掉旧后缀
+            String[] oldKeywordArr = keyword.split(" ");
+            for (String str : oldKeywordArr) {
+                if (oldKeywordArr.length > 1) {
+                    if ("distributor".equals(str) || "wholeseale".equals(str) || "retail".equals(str) || "store".equals(str) ||
+                            "dropshipper".equals(str) || "resellers".equals(str) || "dealership".equals(str) || "jobber".equals(str) ||
+                            "deal".equals(str) || "merchant".equals(str)) {
+                        keyword = keyword.replace("", "")
+                                .replace("distributor", "")
+                                .replace("wholeseale", "")
+                                .replace("retail", "")
+                                .replace("store", "")
+                                .replace("dropshipper", "")
+                                .replace("resellers", "")
+                                .replace("dealership", "")
+                                .replace("jobber", "")
+                                .replace("deal", "")
+                                .replace("merchant", "").trim();
+                    }
+                }
+            }
+            //随机新后缀
+            int i = new Random().nextInt(AllConstant.SuffixConstant.SuffixParam.length);
+            String key = AllConstant.SuffixConstant.SuffixParam[i];
+            param = keyword.replace(" ", " OR ") + " OR " + key;
         }
 
         /**
@@ -39,7 +65,7 @@ public class AnalysisParam {
          */
         String country = request.getParameter("cr");
         if (StringUtils.isNotBlank(country)) {
-            param = param + "+location:" + country.replace("country", "");
+            param = param + " location:" + country.replace("country", "");
         }
 
         /**
@@ -49,7 +75,7 @@ public class AnalysisParam {
         if (StringUtils.isBlank(lr)) {
             lr = "lang_en";
         }
-        param = param + "+language:" + lr.replace("lang_", "");
+        param = param + " language:" + lr.replace("lang_", "");
 
         /**
          * 处理页码参数page
@@ -60,7 +86,7 @@ public class AnalysisParam {
         String value = HttpUtils.doGet(getUrl);
         System.out.println("获取到的页码是>>>>>>   " + value);
         int page;
-        if (StringUtils.isBlank(value)) {
+        if (StringUtils.isBlank(value) || "null".equals(value)) {
             System.out.println("该关键词是首次采集。。。");
             page = 1;
         } else {
